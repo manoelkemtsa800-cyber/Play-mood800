@@ -44,11 +44,13 @@ jobs:
         run: chmod +x android/gradlew
 
       # 7. Build APK Debug
-      - name: Build APK Debug
-        working-directory: android
-        run: ./gradlew assembleDebug --no-daemon
-        env:
-          ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
+    - name: Build APK Debug
+  working-directory: android
+  run: ./gradlew assembleDebug --no-daemon
+  env:
+    ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
+    SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+    SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
 
       # 8. Upload APK en artifact téléchargeable
       - name: Upload APK
