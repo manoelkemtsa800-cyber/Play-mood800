@@ -1,0 +1,20 @@
+export const colors = {
+  primary: '#6C5CE7',
+  background: '#121212',
+  surface: '#1E1E1E',
+  text: '#FFFFFF',
+  textSecondary: '#A0A0A0',
+  border: '#2C2C2C',
+  error: '#FF4757',
+  success: '#2ED573',
+  moods: {
+    happy: '#FFD700',
+    relaxed: '#87CEEB',
+    motivated: '#FF4500',
+    sad: '#4682B4',
+    inLove: '#FF69B4',
+    party: '#9400D3',
+    tired: '#708090',
+    focused: '#32CD32',
+  },
+};
