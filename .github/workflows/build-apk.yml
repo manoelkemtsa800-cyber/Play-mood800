@@ -5,7 +5,7 @@ on:
     branches: [main, master]
   pull_request:
     branches: [main, master]
-  workflow_dispatch: # Permet de déclencher manuellement depuis GitHub
+  workflow_dispatch:
 
 jobs:
   build-android:
@@ -13,46 +13,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Récupérer le code source
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Configurer Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'npm'
 
-      # 3. Configurer Java 17 (requis pour React Native 0.73)
       - name: Setup Java JDK
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # 4. Configurer l'Android SDK
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      # 5. Installer les dépendances npm
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
-      # 6. Rendre gradlew exécutable
       - name: Make Gradlew executable
         run: chmod +x android/gradlew
 
-      # 7. Build APK Debug
-    - name: Build APK Debug
-  working-directory: android
-  run: ./gradlew assembleDebug --no-daemon
-  env:
-    ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
-    SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-    SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+      - name: Build APK Debug
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon
+        env:
+          ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
 
-      # 8. Upload APK en artifact téléchargeable
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
@@ -60,7 +52,6 @@ jobs:
           path: android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 7
 
-      # 9. Afficher le chemin de l'APK généré
       - name: APK info
         run: |
           echo "✅ APK généré avec succès !"
