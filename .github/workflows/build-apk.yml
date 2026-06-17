@@ -7,6 +7,9 @@ on:
     branches: [main, master]
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build-android:
     name: Build APK Android
@@ -55,14 +58,12 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
 
+      - name: Trouver l'APK généré
+        run: find android/app/build/outputs/apk -name "*.apk" | tee apk-path.txt
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: PlayMood-release-apk
-          path: android/app/build/outputs/apk/release/app-release-unsigned.apk
+          path: android/app/build/outputs/apk/**/*.apk
           retention-days: 7
-
-      - name: APK info
-        run: |
-          echo "✅ APK Release généré avec succès !"
-          ls -lh android/app/build/outputs/apk/release/
